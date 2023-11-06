@@ -4,18 +4,18 @@
 
 typedef struct lista
 {
-    int matricula;
-    char nome[30];
-    int ano;
+    int matriculaAluno;
+    char nomeAluno[30];
+    int anoAluno;
     struct lista *prox;
 } Lista;
 
 typedef struct curso
 {
-    int codigo;
-    char nome[30];
-    char centro[4];
-    Lista *lista;
+    int codigoCurso;
+    char nomeCurso[30];
+    char centroCurso[4];
+    Lista *listaAlunos;
     struct curso *esq;
     struct curso *dir;
 } Curso;
@@ -26,11 +26,11 @@ Curso *freeNo (Curso *raiz, int codigoLocal)
     {
         return NULL;
     }
-    else if (raiz->codigo > codigoLocal)
+    else if (raiz->codigoCurso > codigoLocal)
     {
         raiz->esq = freeNo (raiz->esq, codigoLocal);
     }
-    else if (raiz->codigo < codigoLocal)
+    else if (raiz->codigoCurso < codigoLocal)
     {
         raiz->dir = freeNo (raiz->dir, codigoLocal);
     }
@@ -59,8 +59,8 @@ Curso *freeNo (Curso *raiz, int codigoLocal)
             {
                 f = f->dir;
             }
-            raiz->codigo = f->codigo;
-            f->codigo = codigoLocal;
+            raiz->codigoCurso = f->codigoCurso;
+            f->codigoCurso = codigoLocal;
             raiz->esq = freeNo(raiz->esq, codigoLocal);
         }
     }
@@ -68,7 +68,7 @@ Curso *freeNo (Curso *raiz, int codigoLocal)
     return raiz;
 }   
 
-Curso *remover (Curso *raiz)
+Curso *removeCurso (Curso *raiz)
 {
     int codigoLocal;
     printf("Digite o codigo do curso que deseja remover: \n");
@@ -83,38 +83,38 @@ void imprimeArv (Curso *raiz)
     if (raiz != NULL)
     {
         imprimeArv (raiz->esq);
-        printf ("Codigo: %d\t", raiz->codigo);
-        printf ("Nome: %s\t", raiz->nome);
-        printf ("Centro: %s\n", raiz->centro);
+        printf ("Codigo: %d\t", raiz->codigoCurso);
+        printf ("Nome: %s\t", raiz->nomeCurso);
+        printf ("Centro: %s\n", raiz->centroCurso);
         imprimeArv (raiz->dir);
     }
 }
 
-Curso *criaNo (Curso *raiz, int codigoLocal, char nomeLocal[30], char centroLocal[4])
+Curso *criaNoCurso (Curso *raiz, int codigoLocal, char nomeLocal[30], char centroLocal[4])
 {
     
     if(raiz == NULL)
     {
         raiz = (Curso*)malloc(sizeof(Curso));
-        raiz->codigo = codigoLocal;
-        strcpy(raiz->nome, nomeLocal);
-        strcpy(raiz->centro, centroLocal);
-        raiz->lista = NULL;
+        raiz->codigoCurso = codigoLocal;
+        strcpy(raiz->nomeCurso, nomeLocal);
+        strcpy(raiz->centroCurso, centroLocal);
+        raiz->listaAlunos = NULL;
         raiz->esq = raiz->dir = NULL;
     }
-    else if (codigoLocal < raiz->codigo)
+    else if (codigoLocal < raiz->codigoCurso)
     {
-        raiz->esq = criaNo (raiz->esq, codigoLocal, nomeLocal, centroLocal);
+        raiz->esq = criaNoCurso (raiz->esq, codigoLocal, nomeLocal, centroLocal);
     }
     else
     {
-        raiz->dir = criaNo (raiz->dir, codigoLocal, nomeLocal, centroLocal);
+        raiz->dir = criaNoCurso (raiz->dir, codigoLocal, nomeLocal, centroLocal);
     }
     
     return raiz;
 }
 
-Curso *insere (Curso *raiz){
+Curso *insereCurso (Curso *raiz){
     int codigoLocal;
     char nomeLocal[30], centroLocal[4];
 
@@ -129,7 +129,7 @@ Curso *insere (Curso *raiz){
     fgets (centroLocal, sizeof(centroLocal), stdin);
     centroLocal[strcspn(centroLocal, "\n")] = '\0';
 
-    raiz = criaNo(raiz, codigoLocal, nomeLocal, centroLocal);
+    raiz = criaNoCurso(raiz, codigoLocal, nomeLocal, centroLocal);
 
     return raiz;
 }
@@ -140,20 +140,20 @@ int main()
     Curso *arv = NULL;
     Lista *lista = NULL;
 
-    arv = insere (arv);
-    arv = insere (arv);
-    arv = insere (arv);
-    arv = insere (arv);
+    arv = insereCurso (arv);
+    arv = insereCurso (arv);
+    arv = insereCurso (arv);
+    arv = insereCurso (arv);
     imprimeArv (arv);
-    arv = remover (arv);
+    arv = removeCurso (arv);
     imprimeArv (arv);
-    arv = remover (arv);
+    arv = removeCurso (arv);
     imprimeArv (arv);
-    arv = remover (arv);
+    arv = removeCurso (arv);
     imprimeArv (arv);
-    arv = remover (arv);
+    arv = removeCurso (arv);
     imprimeArv (arv);
-    arv = remover (arv);
+    arv = removeCurso (arv);
     imprimeArv (arv);
 
     return 0;
