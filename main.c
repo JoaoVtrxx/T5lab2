@@ -23,7 +23,8 @@ typedef struct curso
 Curso *freeNo (Curso *raiz, int codigoLocal)
 {
     if (raiz == NULL)
-    {
+    {   
+        printf("Nao encontrado. \n");
         return NULL;
     }
     else if (raiz->codigoCurso > codigoLocal)
@@ -114,7 +115,8 @@ Curso *criaNoCurso (Curso *raiz, int codigoLocal, char nomeLocal[30], char centr
     return raiz;
 }
 
-Curso *insereCurso (Curso *raiz){
+Curso *insereCurso (Curso *raiz)
+{
     int codigoLocal;
     char nomeLocal[30], centroLocal[4];
 
@@ -134,27 +136,152 @@ Curso *insereCurso (Curso *raiz){
     return raiz;
 }
 
+Lista *insereLista(Lista *listaAlunos, int matriculaAlunoLocal, char nomeAlunoLocal[30], int anoAlunoLocal)
+{
+    Lista *novo = (Lista*) malloc(sizeof(Lista));
+    novo->matriculaAluno = matriculaAlunoLocal;
+    strcpy(novo->nomeAluno, nomeAlunoLocal);
+    novo->anoAluno = anoAlunoLocal;
+
+    Lista *ant = NULL;
+    Lista *p = listaAlunos;
+
+    while(p != NULL && p->matriculaAluno < matriculaAlunoLocal)
+    {
+        ant = p;
+        p = p->prox;
+    }
+
+    if(ant == NULL)
+    {
+        novo->prox = listaAlunos;
+        listaAlunos = novo;
+    }
+    else
+    {
+        novo->prox = ant->prox;
+        ant->prox = novo;
+    }
+    
+    return listaAlunos;
+}
+
+Curso *criaAluno(Curso *raiz, int codigoLocal)
+{
+    if(raiz == NULL)
+    {
+        printf("Nao encontrado. \n");
+        return NULL;
+    }
+    else if (raiz->codigoCurso > codigoLocal)
+    {
+        raiz->esq = criaAluno (raiz->esq, codigoLocal);
+    }
+    else if (raiz->codigoCurso < codigoLocal)
+    {
+        raiz->dir = criaAluno (raiz->dir, codigoLocal);
+    }
+    else{
+        int matriculaAlunoLocal;
+        char nomeAlunoLocal[30];
+        int anoAlunoLocal;
+
+        printf("Digite a matricula do aluno: ");
+        scanf(" %d", &matriculaAlunoLocal);
+
+        printf("Digite o ano de ingresso do aluno: ");
+        scanf(" %d", &anoAlunoLocal);
+
+        getchar ();
+        printf ("Informe o nome do aluno: ");
+        fgets (nomeAlunoLocal, sizeof(nomeAlunoLocal), stdin);
+        nomeAlunoLocal[strcspn(nomeAlunoLocal, "\n")] = '\0';
+
+        raiz->listaAlunos = insereLista(raiz->listaAlunos, matriculaAlunoLocal, nomeAlunoLocal, anoAlunoLocal);
+    }
+
+    return raiz;
+}
+
+Curso *insereAluno(Curso *raiz)
+{   
+    int codigoLocal;
+
+    printf("Digite o codigo do curso em que deseja inserir o aluno: \n");
+    scanf(" %d", &codigoLocal);
+
+    raiz = criaAluno(raiz, codigoLocal);
+
+    return raiz;
+}
+
+void percorreArvore(Curso *raiz,  int codigoLocal)
+{
+    if(raiz == NULL)
+    {
+        printf("Nao encontrado. \n");
+    }
+    else if (raiz->codigoCurso > codigoLocal)
+    {
+        percorreArvore (raiz->esq, codigoLocal);
+    }
+    else if (raiz->codigoCurso < codigoLocal)
+    {
+        percorreArvore (raiz->dir, codigoLocal);
+    }
+    else{
+        Lista *p = raiz->listaAlunos;
+
+        if(p == NULL){
+            printf("Lista vazia.\n");
+        }
+        else
+        {
+            while(p != NULL){
+                printf("Nome: %s\n", p->nomeAluno);
+                p = p->prox;
+            }
+        }
+    }
+}
+
+void imprimeListaAlunos(Curso *raiz)
+{
+    int codigoLocal;
+
+    printf("Digite o codigo do curso que deseja imprimir a lista de alunos: \n");
+    scanf(" %d", &codigoLocal);
+
+    percorreArvore(raiz, codigoLocal);
+    
+}
 
 int main()
 {   
     Curso *arv = NULL;
-    Lista *lista = NULL;
 
     arv = insereCurso (arv);
     arv = insereCurso (arv);
-    arv = insereCurso (arv);
-    arv = insereCurso (arv);
+    // arv = insereCurso (arv);
+    // arv = insereCurso (arv);
     imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
+    // arv = removeCurso (arv);
+    // imprimeArv (arv);
+    // arv = removeCurso (arv);
+    // imprimeArv (arv);
+    // arv = removeCurso (arv);
+    // imprimeArv (arv);
+    // arv = removeCurso (arv);
+    // imprimeArv (arv);
+    // arv = removeCurso (arv);
+
+    arv = insereAluno (arv);
+    arv = insereAluno (arv);
+
+    imprimeListaAlunos(arv);
+    imprimeListaAlunos(arv);
+
+    // imprimeArv (arv);
 
     return 0;
 }
