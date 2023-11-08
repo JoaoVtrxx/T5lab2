@@ -72,7 +72,7 @@ Curso *freeNo (Curso *raiz, int codigoLocal)
 Curso *removeCurso (Curso *raiz)
 {
     int codigoLocal;
-    printf("Digite o codigo do curso que deseja remover: \n");
+    printf("Digite o codigo do curso que deseja remover: ");
     scanf(" %d", &codigoLocal);
     raiz = freeNo(raiz, codigoLocal);
 
@@ -84,8 +84,8 @@ void imprimeArv (Curso *raiz)
     if (raiz != NULL)
     {
         imprimeArv (raiz->esq);
-        printf ("Codigo: %d\t\t", raiz->codigoCurso);
-        printf ("Nome: %s\t\t", raiz->nomeCurso);
+        printf ("Codigo: %d\t\t\t\t\t", raiz->codigoCurso);
+        printf ("Nome: %s\t\t\t\t\t", raiz->nomeCurso);
         printf ("Centro: %s\n", raiz->centroCurso);
         imprimeArv (raiz->dir);
     }
@@ -203,18 +203,6 @@ Curso *criaAluno(Curso *raiz, int codigoLocal)
     return raiz;
 }
 
-Curso *insereAluno(Curso *raiz)
-{   
-    int codigoLocal;
-
-    printf("Digite o codigo do curso em que deseja inserir o aluno: ");
-    scanf("%d", &codigoLocal);
-
-    raiz = criaAluno(raiz, codigoLocal);
-
-    return raiz;
-}
-
 void percorreArvore(Curso *raiz,  int codigoLocal)
 {
     if(raiz == NULL)
@@ -240,11 +228,84 @@ void percorreArvore(Curso *raiz,  int codigoLocal)
         {
             while(p != NULL)
             {
-                printf("Nome: %s\n", p->nomeAluno);
+                printf("Nome: %s\t\t\t\t\tMatricula: %d\n", p->nomeAluno, p->matriculaAluno);
                 p = p->prox;
             }
         }
     }
+}
+
+Curso *excluirAluno (Curso *raiz, int codigoLocal)
+{
+    if (raiz == NULL)
+    {
+        printf("Nao encontrado.\n");
+        return NULL;
+    }
+    else if (raiz->codigoCurso > codigoLocal)
+    {
+        raiz->esq = excluirAluno (raiz->esq, codigoLocal);
+    }
+    else if (raiz->codigoCurso < codigoLocal)
+    {
+        raiz->dir = excluirAluno (raiz->dir, codigoLocal);
+    }
+    else
+    {
+        int matriculaLocal;
+        percorreArvore (raiz, codigoLocal);
+        printf ("Digite a matricula do aluno que deseja remover: ");
+        scanf ("%d", &matriculaLocal);
+        Lista *p = raiz->listaAlunos;
+        Lista *ant = NULL;
+        
+        while(p != NULL && p->matriculaAluno != matriculaLocal)
+        {
+            ant = p;
+            p = p->prox;
+        }
+        if (p == NULL)
+        {
+            printf ("Aluno nao encontrado.\n");
+        }
+        else
+        {
+            if (ant == NULL)
+            {
+                raiz->listaAlunos = p->prox;
+            }
+            else
+            {
+                ant->prox = p->prox;
+            }
+            free (p);
+        }
+    }
+    return raiz;
+}
+
+Curso *removeAluno (Curso *raiz)
+{
+    int codigoLocal;
+
+    printf("Digite o codigo do curso em que deseja remover o aluno: ");
+    scanf("%d", &codigoLocal);
+
+    raiz = excluirAluno(raiz, codigoLocal);
+
+    return raiz;
+}
+
+Curso *insereAluno (Curso *raiz)
+{   
+    int codigoLocal;
+
+    printf("Digite o codigo do curso em que deseja inserir o aluno: ");
+    scanf("%d", &codigoLocal);
+
+    raiz = criaAluno(raiz, codigoLocal);
+
+    return raiz;
 }
 
 void imprimeListaAlunos(Curso *raiz)
@@ -267,9 +328,9 @@ void imprimeVinculos (Curso *raiz)
 {
     if (raiz != NULL)
     {
-        imprimeVinculos	 (raiz->esq);
-        printf ("Codigo: %d\t\t", raiz->codigoCurso);
-        printf ("Nome: %s\t\t", raiz->nomeCurso);
+        imprimeVinculos	(raiz->esq);
+        printf ("Codigo: %d\t\t\t\t\t", raiz->codigoCurso);
+        printf ("Nome: %s\t\t\t\t\t", raiz->nomeCurso);
         printf ("Centro: %s\n", raiz->centroCurso);
 
         printf ("Alunos matriculados em %s: \n", raiz->nomeCurso);
@@ -282,7 +343,7 @@ void imprimeVinculos (Curso *raiz)
         {
             while(p != NULL)
             {
-                printf("Nome: %s\t\tMatricula: %d\n", p->nomeAluno, p->matriculaAluno);
+                printf("Nome: %s\t\t\t\t\tMatricula: %d\n", p->nomeAluno, p->matriculaAluno);
                 p = p->prox;
             }
             printf ("\n");
@@ -291,33 +352,51 @@ void imprimeVinculos (Curso *raiz)
     }
 }
 
+void menu (Curso *arv)
+{
+    int opcao;
+    while (1)
+    {
+        printf ("Digite a opcao desejada\n");
+        printf ("1) Inserir curso\n2) Excluir curso\n3) Imprimir cursos\n4) Inserir aluno\n5) Excluir aluno\n");
+        printf ("6) Imprimir alunos\n7) Imprimir vinculos\n8) Encerrar programa\n");
+        scanf ("%d", &opcao);
+
+        switch (opcao)
+        {
+            case 1:
+                arv = insereCurso (arv);
+                break;
+            case 2:
+                arv = removeCurso (arv);
+                break;
+            case 3:
+                imprimeArv (arv);
+                break;
+            case 4:
+                arv = insereAluno (arv);
+                break;
+            case 5:
+                arv = removeAluno (arv);
+                break;
+            case 6:
+                imprimeListaAlunos(arv);
+                break;
+            case 7:
+                imprimeVinculos (arv);
+                break;
+            case 8:
+                free (arv);
+                return;
+        }
+    }
+}
+
 int main()
 {   
     Curso *arv = NULL;
 
-    arv = insereCurso (arv);
-    arv = insereCurso (arv);
-    // arv = insereCurso (arv);
-    // arv = insereCurso (arv);
-    imprimeArv (arv);
-    // arv = removeCurso (arv);
-    // imprimeArv (arv);
-    // arv = removeCurso (arv);
-    // imprimeArv (arv);
-    // arv = removeCurso (arv);
-    // imprimeArv (arv);
-    // arv = removeCurso (arv);
-    // imprimeArv (arv);
-    // arv = removeCurso (arv);
-
-    arv = insereAluno (arv);
-    arv = insereAluno (arv);
-
-    /* imprimeListaAlunos(arv);
-    imprimeListaAlunos(arv); */
-
-    // imprimeArv (arv);
-    imprimeVinculos (arv);
+    menu (arv);
 
     return 0;
 }
