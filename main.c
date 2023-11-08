@@ -255,18 +255,23 @@ void imprimeListaAlunos(Curso *raiz)
     scanf("%d", &codigoLocal);
 
     percorreArvore(raiz, codigoLocal);
+}
+
+void teste()
+{
     
 }
+
 
 void imprimeVinculos (Curso *raiz)
 {
     if (raiz != NULL)
     {
-        imprimeArv (raiz->esq);
+        imprimeVinculos	 (raiz->esq);
         printf ("Codigo: %d\t\t", raiz->codigoCurso);
         printf ("Nome: %s\t\t", raiz->nomeCurso);
         printf ("Centro: %s\n", raiz->centroCurso);
-            printf ("chega ate aqui esse caco\n\n\n");
+
         printf ("Alunos matriculados em %s: \n", raiz->nomeCurso);
         Lista *p = raiz->listaAlunos;
         if(p == NULL)
@@ -282,7 +287,7 @@ void imprimeVinculos (Curso *raiz)
             }
             printf ("\n");
         }
-        imprimeArv (raiz->dir);
+        imprimeVinculos (raiz->dir);
     }
 }
 
