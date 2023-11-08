@@ -169,7 +169,8 @@ void percorreArvore(Curso *raiz,  int codigoLocal)
         {
             while(p != NULL)
             {
-                printf("Nome: %s\t\t\t\t\tMatricula: %d\n", p->nomeAluno, p->matriculaAluno);
+                printf("Nome: %s", p->nomeAluno);
+                printf ("\t\t\t\tMatricula: %d\n", p->matriculaAluno);
                 p = p->prox;
             }
         }
@@ -192,9 +193,9 @@ void imprimeVinculos (Curso *raiz)
     if (raiz != NULL)
     {
         imprimeVinculos	(raiz->esq);
-        printf ("Codigo: %d\t\t\t\t\t", raiz->codigoCurso);
-        printf ("Nome: %s\t\t\t\t\t", raiz->nomeCurso);
-        printf ("Centro: %s\n", raiz->centroCurso);
+        printf ("Codigo: %d", raiz->codigoCurso);
+        printf ("\t\t\t\tNome: %s", raiz->nomeCurso);
+        printf ("\t\t\t\tCentro: %s\n", raiz->centroCurso);
 
         printf ("Alunos matriculados em %s: \n", raiz->nomeCurso);
         Lista *p = raiz->listaAlunos;
@@ -206,7 +207,8 @@ void imprimeVinculos (Curso *raiz)
         {
             while(p != NULL)
             {
-                printf("Nome: %s\t\t\t\t\tMatricula: %d\n", p->nomeAluno, p->matriculaAluno);
+                printf("Nome: %s", p->nomeAluno);
+                printf ("\t\t\t\tMatricula: %d\n", p->matriculaAluno);
                 p = p->prox;
             }
             printf ("\n");

@@ -9,9 +9,9 @@ void imprimeArv (Curso *raiz)
     if (raiz != NULL)
     {
         imprimeArv (raiz->esq);
-        printf ("Codigo: %d\t\t\t\t\t", raiz->codigoCurso);
-        printf ("Nome: %s\t\t\t\t\t", raiz->nomeCurso);
-        printf ("Centro: %s\n", raiz->centroCurso);
+        printf ("Codigo: %d", raiz->codigoCurso);
+        printf ("\t\t\t\tNome: %s", raiz->nomeCurso);
+        printf ("\t\t\t\tCentro: %s\n", raiz->centroCurso);
         imprimeArv (raiz->dir);
     }
 }
