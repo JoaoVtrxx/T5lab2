@@ -1,160 +1,54 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "curso.h"
+#include "lista.h"
 
-typedef struct lista
+void menu (Curso *arv)
 {
-    int matriculaAluno;
-    char nomeAluno[30];
-    int anoAluno;
-    struct lista *prox;
-} Lista;
+    int opcao;
+    while (1)
+    {
+        printf ("Digite a opcao desejada\n");
+        printf ("1) Inserir curso\n2) Excluir curso\n3) Imprimir cursos\n4) Inserir aluno\n5) Excluir aluno\n");
+        printf ("6) Imprimir alunos\n7) Imprimir vinculos\n8) Encerrar programa\n");
+        scanf ("%d", &opcao);
 
-typedef struct curso
-{
-    int codigoCurso;
-    char nomeCurso[30];
-    char centroCurso[4];
-    Lista *listaAlunos;
-    struct curso *esq;
-    struct curso *dir;
-} Curso;
-
-Curso *freeNo (Curso *raiz, int codigoLocal)
-{
-    if (raiz == NULL)
-    {
-        return NULL;
-    }
-    else if (raiz->codigoCurso > codigoLocal)
-    {
-        raiz->esq = freeNo (raiz->esq, codigoLocal);
-    }
-    else if (raiz->codigoCurso < codigoLocal)
-    {
-        raiz->dir = freeNo (raiz->dir, codigoLocal);
-    }
-    else
-    {
-        if (raiz->esq == NULL && raiz->dir == NULL)
+        switch (opcao)
         {
-            free(raiz);
-            return NULL;
+            case 1:
+                arv = insereCurso (arv);
+                break;
+            case 2:
+                arv = removeCurso (arv);
+                break;
+            case 3:
+                imprimeArv (arv);
+                break;
+            case 4:
+                arv = insereAluno (arv);
+                break;
+            case 5:
+                arv = removeAluno (arv);
+                break;
+            case 6:
+                imprimeListaAlunos(arv);
+                break;
+            case 7:
+                imprimeVinculos (arv);
+                break;
+            case 8:
+                free (arv);
+                return;
         }
-        else if(raiz->esq == NULL)
-        {
-            Curso *t = raiz;
-            raiz = raiz->dir;
-            free(t);
-        }
-        else if(raiz->dir == NULL){
-            Curso *t = raiz;
-            raiz = raiz->esq;
-            free(t);
-        }
-        else
-        {
-            Curso *f = raiz->esq;
-            while(f->dir != NULL)
-            {
-                f = f->dir;
-            }
-            raiz->codigoCurso = f->codigoCurso;
-            f->codigoCurso = codigoLocal;
-            raiz->esq = freeNo(raiz->esq, codigoLocal);
-        }
-    }
-
-    return raiz;
-}   
-
-Curso *removeCurso (Curso *raiz)
-{
-    int codigoLocal;
-    printf("Digite o codigo do curso que deseja remover: \n");
-    scanf(" %d", &codigoLocal);
-    raiz = freeNo(raiz, codigoLocal);
-
-    return raiz;
-}
-
-void imprimeArv (Curso *raiz)
-{
-    if (raiz != NULL)
-    {
-        imprimeArv (raiz->esq);
-        printf ("Codigo: %d\t", raiz->codigoCurso);
-        printf ("Nome: %s\t", raiz->nomeCurso);
-        printf ("Centro: %s\n", raiz->centroCurso);
-        imprimeArv (raiz->dir);
     }
 }
-
-Curso *criaNoCurso (Curso *raiz, int codigoLocal, char nomeLocal[30], char centroLocal[4])
-{
-    
-    if(raiz == NULL)
-    {
-        raiz = (Curso*)malloc(sizeof(Curso));
-        raiz->codigoCurso = codigoLocal;
-        strcpy(raiz->nomeCurso, nomeLocal);
-        strcpy(raiz->centroCurso, centroLocal);
-        raiz->listaAlunos = NULL;
-        raiz->esq = raiz->dir = NULL;
-    }
-    else if (codigoLocal < raiz->codigoCurso)
-    {
-        raiz->esq = criaNoCurso (raiz->esq, codigoLocal, nomeLocal, centroLocal);
-    }
-    else
-    {
-        raiz->dir = criaNoCurso (raiz->dir, codigoLocal, nomeLocal, centroLocal);
-    }
-    
-    return raiz;
-}
-
-Curso *insereCurso (Curso *raiz){
-    int codigoLocal;
-    char nomeLocal[30], centroLocal[4];
-
-    printf ("Digite o codigo do curso: ");
-    scanf ("%d", &codigoLocal);
-    getchar ();
-    printf ("Informe o nome do curso: ");
-    fgets (nomeLocal, sizeof(nomeLocal), stdin);
-    nomeLocal[strcspn(nomeLocal, "\n")] = '\0';
-    
-    printf ("Informe o centro do curso: ");
-    fgets (centroLocal, sizeof(centroLocal), stdin);
-    centroLocal[strcspn(centroLocal, "\n")] = '\0';
-
-    raiz = criaNoCurso(raiz, codigoLocal, nomeLocal, centroLocal);
-
-    return raiz;
-}
-
 
 int main()
 {   
     Curso *arv = NULL;
-    Lista *lista = NULL;
 
-    arv = insereCurso (arv);
-    arv = insereCurso (arv);
-    arv = insereCurso (arv);
-    arv = insereCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
-    arv = removeCurso (arv);
-    imprimeArv (arv);
+    menu (arv);
 
     return 0;
 }
