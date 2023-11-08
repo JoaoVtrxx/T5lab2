@@ -84,14 +84,14 @@ void imprimeArv (Curso *raiz)
     if (raiz != NULL)
     {
         imprimeArv (raiz->esq);
-        printf ("Codigo: %d\t", raiz->codigoCurso);
-        printf ("Nome: %s\t", raiz->nomeCurso);
+        printf ("Codigo: %d\t\t", raiz->codigoCurso);
+        printf ("Nome: %s\t\t", raiz->nomeCurso);
         printf ("Centro: %s\n", raiz->centroCurso);
         imprimeArv (raiz->dir);
     }
 }
 
-Curso *criaNoCurso (Curso *raiz, int codigoLocal, char nomeLocal[30], char centroLocal[4])
+Curso *criaNoCurso (Curso *raiz, int codigoLocal, char nomeLocal[30], char centroLocal[5])
 {
     
     if(raiz == NULL)
@@ -118,7 +118,7 @@ Curso *criaNoCurso (Curso *raiz, int codigoLocal, char nomeLocal[30], char centr
 Curso *insereCurso (Curso *raiz)
 {
     int codigoLocal;
-    char nomeLocal[30], centroLocal[4];
+    char nomeLocal[30], centroLocal[5];
 
     printf ("Digite o codigo do curso: ");
     scanf ("%d", &codigoLocal);
@@ -136,9 +136,9 @@ Curso *insereCurso (Curso *raiz)
     return raiz;
 }
 
-Lista *insereLista(Lista *listaAlunos, int matriculaAlunoLocal, char nomeAlunoLocal[30], int anoAlunoLocal)
+Lista *insereLista (Lista *listaAlunos, int matriculaAlunoLocal, char nomeAlunoLocal[30], int anoAlunoLocal)
 {
-    Lista *novo = (Lista*) malloc(sizeof(Lista));
+    Lista *novo = (Lista*)malloc(sizeof(Lista));
     novo->matriculaAluno = matriculaAlunoLocal;
     strcpy(novo->nomeAluno, nomeAlunoLocal);
     novo->anoAluno = anoAlunoLocal;
@@ -170,7 +170,7 @@ Curso *criaAluno(Curso *raiz, int codigoLocal)
 {
     if(raiz == NULL)
     {
-        printf("Nao encontrado. \n");
+        printf("Nao encontrado.\n");
         return NULL;
     }
     else if (raiz->codigoCurso > codigoLocal)
@@ -207,8 +207,8 @@ Curso *insereAluno(Curso *raiz)
 {   
     int codigoLocal;
 
-    printf("Digite o codigo do curso em que deseja inserir o aluno: \n");
-    scanf(" %d", &codigoLocal);
+    printf("Digite o codigo do curso em que deseja inserir o aluno: ");
+    scanf("%d", &codigoLocal);
 
     raiz = criaAluno(raiz, codigoLocal);
 
@@ -219,7 +219,7 @@ void percorreArvore(Curso *raiz,  int codigoLocal)
 {
     if(raiz == NULL)
     {
-        printf("Nao encontrado. \n");
+        printf("Nao encontrado.\n");
     }
     else if (raiz->codigoCurso > codigoLocal)
     {
@@ -232,12 +232,14 @@ void percorreArvore(Curso *raiz,  int codigoLocal)
     else{
         Lista *p = raiz->listaAlunos;
 
-        if(p == NULL){
+        if(p == NULL)
+        {
             printf("Lista vazia.\n");
         }
         else
         {
-            while(p != NULL){
+            while(p != NULL)
+            {
                 printf("Nome: %s\n", p->nomeAluno);
                 p = p->prox;
             }
@@ -249,11 +251,39 @@ void imprimeListaAlunos(Curso *raiz)
 {
     int codigoLocal;
 
-    printf("Digite o codigo do curso que deseja imprimir a lista de alunos: \n");
-    scanf(" %d", &codigoLocal);
+    printf("Digite o codigo do curso que deseja imprimir a lista de alunos: ");
+    scanf("%d", &codigoLocal);
 
     percorreArvore(raiz, codigoLocal);
     
+}
+
+void imprimeVinculos (Curso *raiz)
+{
+    if (raiz != NULL)
+    {
+        imprimeArv (raiz->esq);
+        printf ("Codigo: %d\t\t", raiz->codigoCurso);
+        printf ("Nome: %s\t\t", raiz->nomeCurso);
+        printf ("Centro: %s\n", raiz->centroCurso);
+            printf ("chega ate aqui esse caco\n\n\n");
+        printf ("Alunos matriculados em %s: \n", raiz->nomeCurso);
+        Lista *p = raiz->listaAlunos;
+        if(p == NULL)
+        {
+            printf("Lista vazia.\n");
+        }
+        else
+        {
+            while(p != NULL)
+            {
+                printf("Nome: %s\t\tMatricula: %d\n", p->nomeAluno, p->matriculaAluno);
+                p = p->prox;
+            }
+            printf ("\n");
+        }
+        imprimeArv (raiz->dir);
+    }
 }
 
 int main()
@@ -278,10 +308,11 @@ int main()
     arv = insereAluno (arv);
     arv = insereAluno (arv);
 
-    imprimeListaAlunos(arv);
-    imprimeListaAlunos(arv);
+    /* imprimeListaAlunos(arv);
+    imprimeListaAlunos(arv); */
 
     // imprimeArv (arv);
+    imprimeVinculos (arv);
 
     return 0;
 }
